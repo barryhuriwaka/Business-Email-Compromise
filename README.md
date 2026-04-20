@@ -1,4 +1,6 @@
-# CASE STUDY 002 - Business Email Compromise (BEC) Attempt  
+[← Back to Main Portfolio](https://github.com/barryhuriwaka/cybersecurity-portfolio)
+
+# CASE STUDY 002 — Business Email Compromise (BEC) Attempt  
 **Status:** Contained  
 **Severity:** High  
 **Category:** Identity Threat / Email Compromise / Social Engineering  
@@ -6,19 +8,23 @@
 ---
 
 ## 🧭 Executive Summary  
+
 A Business Email Compromise (BEC) attempt targeted a finance employee through CFO impersonation.  
 The attacker attempted to initiate fraudulent financial activity and created a suspicious inbox rule to hide incoming messages.
 
-Investigation confirmed:  
+Investigation confirmed:
+
 - Failed MFA attempts from Nigeria  
 - Malicious inbox rule creation  
-- A spoofed CFO email requesting urgent payment  
+- Spoofed CFO email requesting urgent payment  
+- Reply‑to domain mismatch  
 
 The attack was contained before any financial loss occurred.
 
 ---
 
 ## 🎯 Objectives  
+
 - Determine whether the user’s mailbox was compromised  
 - Identify suspicious sign‑ins and MFA fatigue attempts  
 - Detect malicious inbox rules or forwarding rules  
@@ -42,33 +48,37 @@ The attack was contained before any financial loss occurred.
 ---
 
 ## 🔍 Initial Indicators  
+
 - User reported unexpected MFA prompts  
 - Defender flagged a suspicious inbox rule  
 - Sign‑in attempts from Nigeria  
-- CFO impersonation email requesting urgent payment  
-- Reply‑to domain mismatch  
+- CFO impersonation email  
+- Reply‑to mismatch  
 
 ---
 
 ## 📊 KQL Queries Used  
 
-### **Suspicious Sign‑Ins**
-```kql
+### Suspicious Sign‑Ins  
+
+```kusto
 SigninLogs
 | where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
 | project TimeGenerated, IPAddress, Location, ResultType, ResultDescription
 ```
 
-### **Inbox Rule Creation**
-```kql
+### Inbox Rule Creation  
+
+```kusto
 OfficeActivity
 | where UserId == "sarah.miller@brisbanetech.com.au"
 | where Operation == "New-InboxRule"
 | project TimeGenerated, Operation, Parameters
 ```
 
-### **MFA Fatigue Attempts**
-```kql
+### MFA Fatigue Attempts  
+
+```kusto
 SigninLogs
 | where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
 | where ResultDescription contains "MFA"
@@ -78,23 +88,26 @@ SigninLogs
 
 ## 📁 Evidence Summary  
 
-### **Suspicious Inbox Rule**
-```
-Name: RSS-Filter
-Action: MoveToFolder
-Folder: RSS Feeds
-Condition: Apply to all unread messages
-CreatedBy: Unknown session
-```
+### Malicious Inbox Rule  
 
-### **Suspicious Sign‑In Attempts**
+| Field | Value |
+|-------|--------|
+| **Name** | RSS‑Filter |
+| **Action** | MoveToFolder |
+| **Folder** | RSS Feeds |
+| **Condition** | Apply to all unread messages |
+| **Created By** | Unknown session |
+
+### Suspicious Sign‑In Attempts  
+
 | Time (AEST) | IP | Location | Result |
 |-------------|----|----------|--------|
 | 11:42 | 102.89.221.14 | Lagos, Nigeria | Failed |
 | 11:43 | 102.89.221.14 | Lagos, Nigeria | Failed |
 | 11:44 | 102.89.221.14 | Lagos, Nigeria | MFA Required |
 
-### **BEC Email Indicators**
+### BEC Email Indicators  
+
 - Display name spoofing  
 - Urgent financial request  
 - Reply‑to mismatch  
@@ -104,41 +117,45 @@ CreatedBy: Unknown session
 
 ## 🧠 Analyst Assessment  
 
-### **Indicators of Compromise**
+### Indicators of Compromise  
+
 - MFA fatigue attack  
 - Suspicious inbox rule creation  
 - Foreign login attempts  
 - High‑risk user activity flagged  
 - CFO impersonation email  
 
-### **Likely Attack Chain**
+### Likely Attack Chain  
+
 1. Attacker obtained credentials (phishing or breach dump)  
 2. Attempted login from Nigeria  
 3. Triggered MFA fatigue to trick the user  
-4. Created an inbox rule to hide replies  
-5. Sent a fraudulent payment request  
+4. Created inbox rule to hide replies  
+5. Sent fraudulent payment request  
 
-**Risk Level:** **High**  
-BEC attacks frequently lead to financial loss. Early detection prevented escalation.
+**Risk Level:** High — BEC attacks frequently lead to financial loss.
 
 ---
 
 ## 🛡️ Containment Actions  
 
-### **Immediate**
+### Immediate  
+
 - Disabled malicious inbox rule  
 - Forced password reset  
 - Revoked all active sessions  
 - Blocked Nigerian IP range  
 - Alerted the finance team  
 
-### **Investigation**
+### Investigation  
+
 - Reviewed mailbox audit logs  
 - Checked for forwarding rules  
 - Verified no external access tokens  
 - Searched for similar phishing attempts  
 
-### **Recovery**
+### Recovery  
+
 - Re‑enabled account with MFA  
 - User completed phishing awareness refresher  
 - Finance workflows updated to require verbal confirmation  
@@ -157,7 +174,7 @@ BEC attacks frequently lead to financial loss. Early detection prevented escalat
 
 ---
 
-## 🕒 Timeline (AEST)
+## 🕒 Timeline (AEST)  
 
 | Time | Event |
 |------|--------|
@@ -173,6 +190,7 @@ BEC attacks frequently lead to financial loss. Early detection prevented escalat
 ---
 
 ## 📁 Recommended Repo Structure  
+
 ```
 /diagrams
 /logs
@@ -181,4 +199,7 @@ BEC attacks frequently lead to financial loss. Early detection prevented escalat
 /artifacts
 README.md
 ```
+
+---
+
 [← Back to Main Portfolio](https://github.com/barryhuriwaka/cybersecurity-portfolio)
