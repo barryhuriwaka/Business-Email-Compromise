@@ -9,37 +9,27 @@
 
 ---
 
-
 # CASE STUDY 002 — Business Email Compromise (BEC) Attempt  
 **Status:** Contained  
 **Severity:** High  
-**Category:** Identity Threat / Email Compromise / Social Engineering  
+**Category:** Identity Threat / Email Compromise  
 
 ---
 
 ## 🧭 Executive Summary  
 
-A Business Email Compromise (BEC) attempt targeted a finance employee through CFO impersonation.  
-The attacker attempted to initiate fraudulent financial activity and created a suspicious inbox rule to hide incoming messages.
-
-Investigation confirmed:
-
-- Failed MFA attempts from Nigeria  
-- Malicious inbox rule creation  
-- Spoofed CFO email requesting urgent payment  
-- Reply‑to domain mismatch  
-
-The attack was contained before any financial loss occurred.
+A Business Email Compromise attempt targeted a finance employee through CFO impersonation.  
+The attacker attempted fraudulent financial activity and created a suspicious inbox rule to hide incoming messages.
 
 ---
 
 ## 🎯 Objectives  
 
-- Determine whether the user’s mailbox was compromised  
+- Determine whether the mailbox was compromised  
 - Identify suspicious sign‑ins and MFA fatigue attempts  
-- Detect malicious inbox rules or forwarding rules  
-- Assess whether financial fraud was attempted  
-- Contain and secure the affected account  
+- Detect malicious inbox rules  
+- Assess financial fraud risk  
+- Contain and secure the account  
 
 ---
 
@@ -49,10 +39,8 @@ The attack was contained before any financial loss occurred.
 |-------|---------|
 | **User** | sarah.miller@brisbanetech.com.au |
 | **Role** | Finance Officer |
-| **Normal Location** | Brisbane, QLD |
 | **Suspicious Location** | Lagos, Nigeria |
 | **Alert Source** | Microsoft Defender for Office 365 |
-| **Alert Type** | Suspicious Inbox Rule Created |
 | **Authentication** | MFA Enabled |
 
 ---
@@ -60,7 +48,7 @@ The attack was contained before any financial loss occurred.
 ## 🔍 Initial Indicators  
 
 - User reported unexpected MFA prompts  
-- Defender flagged a suspicious inbox rule  
+- Suspicious inbox rule created  
 - Sign‑in attempts from Nigeria  
 - CFO impersonation email  
 - Reply‑to mismatch  
@@ -69,29 +57,14 @@ The attack was contained before any financial loss occurred.
 
 ## 📊 KQL Queries Used  
 
-### Suspicious Sign‑Ins  
-
 ```kusto
 SigninLogs
 | where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
-| project TimeGenerated, IPAddress, Location, ResultType, ResultDescription
 ```
-
-### Inbox Rule Creation  
 
 ```kusto
 OfficeActivity
-| where UserId == "sarah.miller@brisbanetech.com.au"
 | where Operation == "New-InboxRule"
-| project TimeGenerated, Operation, Parameters
-```
-
-### MFA Fatigue Attempts  
-
-```kusto
-SigninLogs
-| where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
-| where ResultDescription contains "MFA"
 ```
 
 ---
@@ -106,22 +79,6 @@ SigninLogs
 | **Action** | MoveToFolder |
 | **Folder** | RSS Feeds |
 | **Condition** | Apply to all unread messages |
-| **Created By** | Unknown session |
-
-### Suspicious Sign‑In Attempts  
-
-| Time (AEST) | IP | Location | Result |
-|-------------|----|----------|--------|
-| 11:42 | 102.89.221.14 | Lagos, Nigeria | Failed |
-| 11:43 | 102.89.221.14 | Lagos, Nigeria | Failed |
-| 11:44 | 102.89.221.14 | Lagos, Nigeria | MFA Required |
-
-### BEC Email Indicators  
-
-- Display name spoofing  
-- Urgent financial request  
-- Reply‑to mismatch  
-- No previous conversation thread  
 
 ---
 
@@ -129,58 +86,37 @@ SigninLogs
 
 ### Indicators of Compromise  
 
-- MFA fatigue attack  
-- Suspicious inbox rule creation  
+- MFA fatigue  
+- Suspicious inbox rule  
 - Foreign login attempts  
-- High‑risk user activity flagged  
-- CFO impersonation email  
+- Impersonation email  
 
 ### Likely Attack Chain  
 
-1. Attacker obtained credentials (phishing or breach dump)  
-2. Attempted login from Nigeria  
-3. Triggered MFA fatigue to trick the user  
-4. Created inbox rule to hide replies  
-5. Sent fraudulent payment request  
-
-**Risk Level:** High — BEC attacks frequently lead to financial loss.
+1. Credentials obtained  
+2. MFA fatigue attack  
+3. Inbox rule creation  
+4. Fraudulent payment attempt  
 
 ---
 
 ## 🛡️ Containment Actions  
 
-### Immediate  
-
-- Disabled malicious inbox rule  
+- Disabled inbox rule  
 - Forced password reset  
-- Revoked all active sessions  
-- Blocked Nigerian IP range  
-- Alerted the finance team  
-
-### Investigation  
-
-- Reviewed mailbox audit logs  
-- Checked for forwarding rules  
-- Verified no external access tokens  
-- Searched for similar phishing attempts  
-
-### Recovery  
-
-- Re‑enabled account with MFA  
-- User completed phishing awareness refresher  
-- Finance workflows updated to require verbal confirmation  
+- Revoked sessions  
+- Blocked IP range  
+- Alerted finance team  
 
 ---
 
 ## 🧬 MITRE ATT&CK Mapping  
 
-| Tactic | Technique | ID | Reason |
-|--------|-----------|----|--------|
-| Initial Access | Phishing | T1566 | CFO impersonation email |
-| Credential Access | MFA Fatigue | T1110.003 | Multiple MFA prompts |
-| Persistence | Mailbox Rule Creation | T1098.002 | Rule to hide replies |
-| Defense Evasion | Valid Accounts | T1078 | Attempted login with stolen creds |
-| Impact | Financial Fraud | T1656 | Attempted payment redirection |
+| Tactic | Technique | ID |
+|--------|-----------|----|
+| Initial Access | Phishing | T1566 |
+| Credential Access | MFA Fatigue | T1110.003 |
+| Persistence | Mailbox Rule Creation | T1098.002 |
 
 ---
 
@@ -189,17 +125,13 @@ SigninLogs
 | Time | Event |
 |------|--------|
 | 11:42 | Failed login from Nigeria |
-| 11:43 | Second failed login |
-| 11:44 | MFA challenge triggered |
-| 11:46 | Suspicious inbox rule created |
+| 11:46 | Inbox rule created |
 | 11:50 | CFO impersonation email received |
-| 12:05 | User reports MFA prompts |
 | 12:10 | SOC begins investigation |
-| 12:20 | Account secured |
 
 ---
 
-## 📁 Recommended Repo Structure  
+## 📁 Repo Structure  
 
 ```
 /diagrams
@@ -210,9 +142,6 @@ SigninLogs
 README.md
 ```
 
----
-
-[← Back to Main Portfolio](https://github.com/barryhuriwaka/cybersecurity-portfolio)
 ---
 
 [← Previous Case Study — Suspicious Login Activity](https://github.com/barryhuriwaka/soc-investigation-suspicious-logins)  
