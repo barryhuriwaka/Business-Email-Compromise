@@ -45,13 +45,15 @@ The attack was contained before any financial loss occurred.
 ## KQL Queries Used
 
 1. Suspicious Sign‑Ins
+   
 ...
    SigninLogs
 | where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
 | project TimeGenerated, IPAddress, Location, ResultType, ResultDescription
 ...
 
-2. Inbox Rule Creation
+3. Inbox Rule Creation
+
 ...
    OfficeActivity
 | where UserId == "sarah.miller@brisbanetech.com.au"
@@ -59,7 +61,7 @@ The attack was contained before any financial loss occurred.
 | project TimeGenerated, Operation, Parameters
 ...
 
-3. MFA Fatigue Attempts
+5. MFA Fatigue Attempts
 ...   
 SigninLogs
 | where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
