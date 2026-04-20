@@ -1,4 +1,4 @@
-# CASE STUDY 002 — Business Email Compromise (BEC) Attempt  
+# CASE STUDY 002 - Business Email Compromise (BEC) Attempt  
 **Status:** Contained  
 **Severity:** High  
 **Category:** Identity Threat / Email Compromise / Social Engineering  
