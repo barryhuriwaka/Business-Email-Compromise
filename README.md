@@ -51,7 +51,7 @@ The attack was contained before any financial loss occurred.
 | project TimeGenerated, IPAddress, Location, ResultType, ResultDescription
 ```
 
-3. Inbox Rule Creation
+2. Inbox Rule Creation
 
 ```
    OfficeActivity
@@ -60,7 +60,7 @@ The attack was contained before any financial loss occurred.
 | project TimeGenerated, Operation, Parameters
 ```
 
-5. MFA Fatigue Attempts
+3. MFA Fatigue Attempts
 ```   
 SigninLogs
 | where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
