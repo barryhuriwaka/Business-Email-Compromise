@@ -213,3 +213,7 @@ README.md
 ---
 
 [← Back to Main Portfolio](https://github.com/barryhuriwaka/cybersecurity-portfolio)
+---
+
+[← Previous Case Study — Suspicious Login Activity](https://github.com/barryhuriwaka/soc-investigation-suspicious-logins)  
+[Next Case Study → Case Study 003 — Phishing & Credential Harvesting](https://github.com/barryhuriwaka/Phishing-Credential-Harvesting)
