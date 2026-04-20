@@ -46,8 +46,7 @@ The attack was contained before any financial loss occurred.
 
 1. Suspicious Sign‑Ins
    
-...
-   SigninLogs
+... SigninLogs
 | where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
 | project TimeGenerated, IPAddress, Location, ResultType, ResultDescription
 ...
