@@ -1,5 +1,15 @@
 [← Back to Main Portfolio](https://github.com/barryhuriwaka/cybersecurity-portfolio)
 
+<div align="center">
+
+# 🔥 CYBERSECURITY CASE STUDY 002  
+### **Business Email Compromise • MFA Fatigue • Financial Fraud Prevention**
+
+</div>
+
+---
+
+
 # CASE STUDY 002 — Business Email Compromise (BEC) Attempt  
 **Status:** Contained  
 **Severity:** High  
