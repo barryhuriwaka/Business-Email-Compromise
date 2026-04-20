@@ -53,28 +53,28 @@ The attack was contained before any financial loss occurred.
 
 3. Inbox Rule Creation
 
-'''
+```
    OfficeActivity
 | where UserId == "sarah.miller@brisbanetech.com.au"
 | where Operation == "New-InboxRule"
 | project TimeGenerated, Operation, Parameters
-'''
+```
 
 5. MFA Fatigue Attempts
-...   
+```   
 SigninLogs
 | where UserPrincipalName == "sarah.miller@brisbanetech.com.au"
 | where ResultDescription contains "MFA"
-...
+```
 
 ## Evidence Summary
-...
+```
 Name: RSS-Filter
 Action: MoveToFolder
 Folder: RSS Feeds
 Condition: Apply to all unread messages
 CreatedBy: Unknown session
-...
+```
 
 ## Suspicious Sign‑In Attempts
 | Time (AEST)	| IP	| Location	| Result|
@@ -170,10 +170,11 @@ BEC attacks frequently lead to financial loss. Early detection prevented escalat
 | 12:20 | Account secured |
 
 ## Recommended Repo Structure
-...
+```
 /diagrams
 /logs
 /queries
 /reports
 /artifacts
 README.md
+```
